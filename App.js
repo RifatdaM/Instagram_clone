@@ -39,6 +39,7 @@ import LoginScreen from "./components/auth/login";
 import MainScreen from "./components/Main";
 import AddScreen from "./components/main/Add";
 import SaveScreen from "./components/main/Save";
+import SearchScreen from "./components/main/Search";
 
 // Route
 const Stack = createStackNavigator();
@@ -100,7 +101,6 @@ export class App extends Component {
             <Stack.Screen
               name="Main"
               component={MainScreen}
-              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Add"
@@ -110,6 +110,7 @@ export class App extends Component {
             <Stack.Screen
               name="Save"
               component={SaveScreen}
+              navigation={this.props.navigation}
             />
           </Stack.Navigator>
         </NavigationContainer>
