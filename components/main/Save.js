@@ -16,7 +16,7 @@ export default function Save(props) {
     const childPath =`post/${firebase.auth().currentUser.uid}/${Math.random().toString(36)}`;
     console.log(childPath);
 
-    const respons = await fatch(uri);
+    const respons = await fetch(uri);
     const blob = await respons.blob();
 
     const task = firebase.storage().ref().child(childPath).put(blob);
