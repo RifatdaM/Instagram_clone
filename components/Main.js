@@ -5,7 +5,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 // Redux Import
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchUser, fetchUserPosts } from "../redux/actions/index";
+import { fetchUser, fetchUserPosts, fetchUserFollowing } from "../redux/actions/index";
 
 // Vactor Icon Import
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,6 +15,8 @@ import FeedScreen from "./main/Feed"
 import ProfileScreen from "./main/Profile"
 import SearchScreen from "./main/Search"
 
+// Firebase Import
+import firebase from "firebase";
 // Bottom Navigation
 const Tab = createMaterialBottomTabNavigator();
 
@@ -27,6 +29,7 @@ export class Main extends Component {
   componentDidMount() {
     this.props.fetchUser();
     this.props.fetchUserPosts();
+    this.props.fetchUserFollowing();
   }
   render() {
 
@@ -38,7 +41,7 @@ export class Main extends Component {
             <MaterialCommunityIcons name="home" color={color} size={26}/>
           ),
         }}/>
-        <Tab.Screen name="Search" component={SearchScreen} 
+        <Tab.Screen name="Search" component={SearchScreen} navigation={this.props.navigation}
         options={{
           tabBarIcon: ({color, size})=>(
             <MaterialCommunityIcons name="magnify" color={color} size={26}/>
@@ -57,6 +60,11 @@ export class Main extends Component {
           ),
         }}/>
         <Tab.Screen name="Profile" component={ProfileScreen} 
+        listeners={({ navigation }) =>({
+          tabPress: event =>{
+            event.preventDefault();
+            navigation.navigate("Profile", {uid: firebase.auth().currentUser.uid})
+          }})}
         options={{
           tabBarIcon: ({color, size})=>(
             <MaterialCommunityIcons name="account-circle" color={color} size={26}/>
@@ -71,6 +79,6 @@ const mapStateToProps = (store) => ({
   currentUser: store.userState.currentUser,
 });
 const mapDispatchProps = (dispatch) =>
-  bindActionCreators({ fetchUser, fetchUserPosts }, dispatch);
+  bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchProps)(Main);
