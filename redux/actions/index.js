@@ -97,10 +97,63 @@ export function fetchUsersFollowingPosts(uid) {
       .collection("posts")
       .doc(uid)
       .collection("userPosts")
-      .orderBy("creation", "desc")
+      .orderBy("creation", "asc")
       .get()
       .then((snapshot) => {
-        const uid = snapshot.docs[0].ref.path.split('/')[1]
+        // let uid = snapshot.docs[0].ref.path.split("/")[1];
+        // console.log(typeof(uid))
+        let loop_runner = true;
+        let uid = "";
+        
+        for (var key in snapshot.query) {
+          if (key === "segments") {
+            uid = snapshot.query[key][1];
+            console.log(typeof(uid))
+            loop_runner = false;
+          }
+          if (!loop_runner) {
+            break;
+          }
+          for (var key2 in snapshot.query[key]) {
+            if (key2 === "segments") {
+              uid = snapshot.query[key][key2][1];
+              console.log(typeof(uid))
+              loop_runner = false;
+            }
+            if (!loop_runner) {
+              break;
+            }
+            for (var key3 in snapshot.query[key][key2]) {
+              if (key3 === "segments") {
+                uid = snapshot.query[key][key2][key3][1];
+                console.log(typeof(uid))
+                loop_runner = false;
+              }
+              if (!loop_runner) {
+                break;
+              }
+              for (var key4 in snapshot.query[key][key2][key3]) {
+                if (key4 === "segments") {
+                  uid = snapshot.query[key][key2][key3][key4][1];
+                  console.log(typeof(uid))
+                  loop_runner = false;
+                }
+                if (!loop_runner) {
+                  break;
+                }
+              }
+              if (!loop_runner) {
+                break;
+              }
+            }
+            if (!loop_runner) {
+              break;
+            }
+          }
+          if (!loop_runner) {
+            break;
+          }
+        }
         console.log({ snapshot, uid });
         const user = getState().usersState.users.find((el) => el.uid === uid);
 
@@ -110,7 +163,7 @@ export function fetchUsersFollowingPosts(uid) {
           return { id, ...data, user };
         });
         console.log(posts);
-        dispatch({ type: USERS_POSTS_STATE_CHANGE, posts, uid })
+        dispatch({ type: USERS_POSTS_STATE_CHANGE, posts, uid });
         console.log(getState());
       });
   };

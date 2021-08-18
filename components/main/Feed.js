@@ -11,7 +11,7 @@ function Feed(props) {
 
   useEffect(() => {
     let posts = [];
-    // console.log(posts);
+    
     // console.log(props.usersLoaded);
     // console.log(props.following.length);
     if (props.usersLoaded == props.following.length) {
@@ -40,6 +40,7 @@ function Feed(props) {
             <View style={styles.containerImage}>
               <Text style={styles.container}>{item.user.name}</Text>
               <Image style={styles.image} source={{ uri: item.downloadURL }} />
+              <Text style={styles.container}>{item.caption}</Text>
             </View>
           )}
         />
